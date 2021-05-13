@@ -12,27 +12,31 @@ if ($null -eq $destination_folder) {
 try {
     [void][System.Reflection.Assembly]::LoadWithPartialName("System.Drawing")
 } catch {
-    Write-Host "Could not load System.Drawing. Cannot read image dimensions."
+    Write-Error "Could not load System.Drawing. Cannot read image dimensions."
 }
 
-$source_path = $HOME + "\AppData\Local\Packages\Microsoft.Windows.ContentDeliveryManager_cw5n1h2txyewy\LocalState\Assets\"
-$files = @(Get-ChildItem -Path $source_path)
+$copied_count = 0
+$desktop_count = 0
+$mobile_count = 0
+
+$lockscreen_source_path = $HOME + "\AppData\Local\Packages\Microsoft.Windows.ContentDeliveryManager_cw5n1h2txyewy\LocalState\Assets\"
+$files = @(Get-ChildItem -Path $lockscreen_source_path)
 $files.ForEach({
     $image_name = $_
-    $file_path = $source_path + "\" + $image_name
+    $file_path = $lockscreen_source_path + "\" + $image_name
 
     $Image = $null
     try {
         $Image = [System.Drawing.Image]::FromFile($file_path)
-    } catch {
-        Write-Host "Could not load image: " $image_name
-    }
+    } catch { }
 
     if (!($null -eq $Image)) {
         if (1920 -eq $Image.Height -and 1080 -eq $Image.Width) {
-            $image_name = "desktop-" + $image_name
+            $desktop_count += 1
+            $image_name = "desktop_" + $desktop_count
         } elseif (1080 -eq $Image.Height -and 1920 -eq $Image.Width) {
-            $image_name = "mobile-" + $image_name
+            $mobile_count += 1
+            $image_name = "mobile_" + $mobile_count
         } else {
             # This image does not appear to be a background
             return
@@ -41,6 +45,11 @@ $files.ForEach({
 
     $destination_path = $destination_folder + $image_name + ".jpg"
     Copy-Item -Path $file_path -Destination $destination_path
+    $copied_count = $copied_count + 1
 })
 
-Write-Host "Copied" $files.Count "files to" $destination_folder
+Write-Host @"
+Copied ${copied_count} files to ${destination_folder}
+    - ${desktop_count} desktop images
+    - ${mobile_count} mobile images
+"@
