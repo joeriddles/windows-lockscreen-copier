@@ -1,6 +1,12 @@
 param ($destination_folder)
 if ($null -eq $destination_folder) {
-    $destination_folder = $HOME + "\Pictures\Lockscreens\"
+    $destination_folder = $HOME + "\Pictures\"
+    $lockscreen_folder = $destination_folder + "Lockscreens\"
+    if (!(Test-Path -Path $lockscreen_folder)) {
+        New-Item -Path $destination_folder -Name "Lockscreens" -ItemType "directory"
+        Write-Host "Created Lockscreen directory"
+    }
+    $destination_folder = $lockscreen_folder
 }
 
 $source_path = $HOME + "\AppData\Local\Packages\Microsoft.Windows.ContentDeliveryManager_cw5n1h2txyewy\LocalState\Assets\"
