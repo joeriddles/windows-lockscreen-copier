@@ -27,7 +27,7 @@ if (!(Test-Path -Path $lockscreen_source_path)) {
 
 $files = @(Get-ChildItem -Path $lockscreen_source_path)
 $files.ForEach({
-    $image_name = $_
+    $image_name = $_.Name
     $file_path = $lockscreen_source_path + "\" + $image_name
 
     $Image = $null
