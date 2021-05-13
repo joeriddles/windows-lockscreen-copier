@@ -20,6 +20,11 @@ $desktop_count = 0
 $mobile_count = 0
 
 $lockscreen_source_path = $HOME + "\AppData\Local\Packages\Microsoft.Windows.ContentDeliveryManager_cw5n1h2txyewy\LocalState\Assets\"
+if (!(Test-Path -Path $lockscreen_source_path)) {
+    Write-Error "Oh no! I can't find the lockscreen wallpaper path on this computer!"
+    exit -1
+}
+
 $files = @(Get-ChildItem -Path $lockscreen_source_path)
 $files.ForEach({
     $image_name = $_
