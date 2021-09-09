@@ -38,10 +38,10 @@ $files.ForEach({
     if (!($null -eq $Image)) {
         if (1920 -eq $Image.Height -and 1080 -eq $Image.Width) {
             $mobile_count += 1
-            $image_name = "mobile_" + $mobile_count
+            $image_name = "mobile_" + $image_name
         } elseif (1080 -eq $Image.Height -and 1920 -eq $Image.Width) {
             $desktop_count += 1
-            $image_name = "desktop_" + $desktop_count
+            $image_name = "desktop_" + $image_name
         } else {
             # This image does not appear to be a background
             return
