@@ -44,6 +44,7 @@ $files.ForEach({
             $image_name = "desktop_" + $image_name
         } else {
             # This image does not appear to be a background
+            Write-Host "${image_name} does not appear to be an image"
             return
         }
     }
